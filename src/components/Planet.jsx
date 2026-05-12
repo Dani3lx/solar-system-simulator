@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
-const Planet = ({ planet, orbit }) => {
+const Planet = ({ planet, orbit, timeScale }) => {
     const { a, e, size, color, speed, i, Ω, ω } = planet;
     const planetRef = useRef();
     const angleRef = useRef(0);
@@ -12,7 +12,7 @@ const Planet = ({ planet, orbit }) => {
     const c = a * e; // focus offset
 
     const T = Math.pow(a, 1.5); // orbital period
-    const angularSpeed = (speed * (2 * Math.PI)) / T; // full rotation over that period
+    const angularSpeed = (speed * timeScale * (2 * Math.PI)) / T; // full rotation over that period
 
     const orbitPoints = useMemo(() => getOrbitalPathPoints(a, b, c, 200, i, Ω, ω), [a, b, c, i, Ω, ω]);
 
