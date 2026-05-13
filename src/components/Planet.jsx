@@ -1,10 +1,10 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Line } from "@react-three/drei";
+import { Billboard, Text, Line } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
-const Planet = ({ planet, orbit, timeScale }) => {
-    const { a, e, size, color, speed, i, Ω, ω } = planet;
+const Planet = ({ planet, orbit, timeScale, label }) => {
+    const { a, e, size, color, speed, i, Ω, ω, name } = planet;
     const planetRef = useRef();
     const angleRef = useRef(0);
 
@@ -29,6 +29,12 @@ const Planet = ({ planet, orbit, timeScale }) => {
             <mesh ref={planetRef} scale={size}>
                 <sphereGeometry args={[1, 32, 32]} />
                 <meshStandardMaterial color={color} roughness={0.9} metalness={0.0} />
+
+                <Billboard visible={label}>
+                    <Text position={[0, 2, 0]} fontSize={1} color="white" anchorX="center" anchorY="middle">
+                        {name}
+                    </Text>
+                </Billboard>
             </mesh>
 
             <Line points={orbitPoints} dashed dashSize={0.1} gapSize={1} transparent opacity={0.3} visible={orbit} />

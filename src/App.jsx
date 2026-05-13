@@ -14,6 +14,7 @@ function App() {
 
     const controls = useControls("sphere", {
         orbit: true,
+        label: true,
         timeScale: {
             min: -3,
             max: 3,
@@ -33,7 +34,7 @@ function App() {
             <OrbitControls makeDefault />
             <Star size={sunRadius} surfaceColor={"#FFD27A"} emissiveColor={"#FFE8AA"} lightColor={"#FFF0C2"} />
             {planets.map((planet) => (
-                <Planet key={planet.name} planet={planet} orbit={controls.orbit} timeScale={controls.timeScale} />
+                <Planet key={planet.name} planet={planet} orbit={controls.orbit} timeScale={controls.timeScale} label={controls.label} />
             ))}
         </>
     );
