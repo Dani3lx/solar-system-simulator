@@ -5,7 +5,7 @@ import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
 const Planet = ({ planet, orbit, timeScale, label }) => {
     const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
-    const texture = useTexture(`src/assets/textures/${name.toLowerCase()}.jpg`);
+    const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
     const orbitRef = useRef();
     const planetRef = useRef();
     const angleRef = useRef(0);

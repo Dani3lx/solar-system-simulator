@@ -6,7 +6,7 @@ import { useFrame } from "@react-three/fiber";
 const Star = ({ star, timeScale }) => {
     const { size, surfaceColor, emissiveColor, lightColor, name, rotationPeriod, T, axialTilt } = star;
     const meshRef = useRef();
-    const texture = useTexture(`src/assets/textures/${name.toLowerCase()}.jpg`);
+    const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
 
     const rotationSpeed = (2 * Math.PI * T) / rotationPeriod;
 
