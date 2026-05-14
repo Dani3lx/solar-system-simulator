@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Billboard, Text, Line, useTexture } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
@@ -6,6 +6,8 @@ import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 const Planet = ({ planet, orbit, timeScale, label }) => {
     const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
     const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
+    const [hovered, setHover] = useState(false);
+
     const orbitRef = useRef();
     const planetRef = useRef();
     const angleRef = useRef(0);
@@ -38,14 +40,22 @@ const Planet = ({ planet, orbit, timeScale, label }) => {
                 {/* axial tilt */}
                 <group rotation-z={axialTilt}>
                     {/* spinning planet */}
-                    <mesh ref={planetRef} scale={size}>
+                    <mesh
+                        ref={planetRef}
+                        scale={hovered ? 3 : size}
+                        onPointerOver={(e) => {
+                            e.stopPropagation();
+                            setHover(true);
+                        }}
+                        onPointerOut={() => setHover(false)}
+                    >
                         <sphereGeometry args={[1, 32, 32]} />
                         <meshStandardMaterial roughness={0.9} metalness={0.0} map={texture} />
                     </mesh>
                 </group>
 
                 <Billboard visible={label}>
-                    <Text position={[0, 2, 0]} fontSize={1} color="white" anchorX="center" anchorY="middle">
+                    <Text position={[0, hovered ? 4 : size + 1, 0]} fontSize={1} color="white" anchorX="center" anchorY="middle">
                         {name}
                     </Text>
                 </Billboard>
