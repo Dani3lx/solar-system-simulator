@@ -1,41 +1,55 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Billboard, Text, Line } from "@react-three/drei";
+import { Billboard, Text, Line, useTexture } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
 const Planet = ({ planet, orbit, timeScale, label }) => {
-    const { a, e, size, color, speed, i, Ω, ω, name } = planet;
+    const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
+    const texture = useTexture(`src/assets/textures/${name.toLowerCase()}.jpg`);
+    const orbitRef = useRef();
     const planetRef = useRef();
     const angleRef = useRef(0);
 
     const b = a * Math.sqrt(1 - Math.pow(e, 2)); // semi-minor axis
     const c = a * e; // focus offset
 
-    const T = Math.pow(a, 1.5); // orbital period
-    const angularSpeed = (speed * timeScale * (2 * Math.PI)) / T; // full rotation over that period
+    const T = Math.pow(a, 1.5);
+
+    const angularSpeed = ((speed / 5) * timeScale * (2 * Math.PI)) / T;
 
     const orbitPoints = useMemo(() => getOrbitalPathPoints(a, b, c, 200, i, Ω, ω), [a, b, c, i, Ω, ω]);
+
+    const rotationSpeedRad = (2 * Math.PI * T) / Math.abs(rotationPeriod);
+    const rotationDirection = Math.sign(rotationPeriod);
 
     useFrame((_, delta) => {
         angleRef.current += angularSpeed * delta;
         const p = transformOrbitPoint(Math.cos(angleRef.current) * a - c, 0, Math.sin(angleRef.current) * b, i, Ω, ω);
-        planetRef.current.position.x = p[0];
-        planetRef.current.position.y = p[1];
-        planetRef.current.position.z = p[2];
+        orbitRef.current.position.set(p[0], p[1], p[2]);
+
+        // spin planet around tilted axis
+        planetRef.current.rotation.y += rotationDirection * rotationSpeedRad * timeScale * delta;
     });
 
     return (
         <group>
-            <mesh ref={planetRef} scale={size}>
-                <sphereGeometry args={[1, 32, 32]} />
-                <meshStandardMaterial color={color} roughness={0.9} metalness={0.0} />
+            {/* orbit position */}
+            <group ref={orbitRef}>
+                {/* axial tilt */}
+                <group rotation-z={axialTilt}>
+                    {/* spinning planet */}
+                    <mesh ref={planetRef} scale={size}>
+                        <sphereGeometry args={[1, 32, 32]} />
+                        <meshStandardMaterial roughness={0.9} metalness={0.0} map={texture} />
+                    </mesh>
+                </group>
 
                 <Billboard visible={label}>
                     <Text position={[0, 2, 0]} fontSize={1} color="white" anchorX="center" anchorY="middle">
                         {name}
                     </Text>
                 </Billboard>
-            </mesh>
+            </group>
 
             <Line points={orbitPoints} dashed dashSize={0.1} gapSize={1} transparent opacity={0.3} visible={orbit} />
         </group>

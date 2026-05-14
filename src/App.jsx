@@ -6,6 +6,7 @@ import Planet from "./components/Planet";
 import { planets } from "./constants/planets";
 import { Perf } from "r3f-perf";
 import { useControls } from "leva";
+import { Sun } from "./constants/stars";
 
 function App() {
     const { perfVisible } = useControls({
@@ -22,7 +23,6 @@ function App() {
         },
     });
 
-    const sunRadius = 5;
     return (
         <>
             {perfVisible && <Perf position="top-left" />}
@@ -32,7 +32,7 @@ function App() {
             </EffectComposer>
             <ambientLight intensity={0.5} />
             <OrbitControls makeDefault />
-            <Star size={sunRadius} surfaceColor={"#FFD27A"} emissiveColor={"#FFE8AA"} lightColor={"#FFF0C2"} />
+            <Star star={Sun} timeScale={controls.timeScale} />
             {planets.map((planet) => (
                 <Planet key={planet.name} planet={planet} orbit={controls.orbit} timeScale={controls.timeScale} label={controls.label} />
             ))}

@@ -1,16 +1,32 @@
-# React + Vite
+# 🌌 Solar System Simulator (Three.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple 3D solar system simulator built with **Three.js**, featuring textured planets, orbital motion, and interactive camera controls.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Real-time 3D solar system visualization
+- Planet textures from Solar System Scope
+- Basic orbital rotation and planet movement
+- Mouse controls (zoom, rotate, pan)
 
-## React Compiler
+- For the practicality:
+    - All planets are 3x larger
+    - Jovian planets are 2x closer
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🪐 Textures
 
-## Expanding the ESLint configuration
+Planet textures sourced from:
+https://www.solarsystemscope.com/textures/
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- Three.js
+- JavaScript
+- WebGL
+
+## 🚀 Run Locally
+
+```bash
+npm install
+npm run dev
+```
