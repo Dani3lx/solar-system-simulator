@@ -6,12 +6,15 @@ A simple 3D solar system simulator built with **Three.js**, featuring textured p
 
 - Real-time 3D solar system visualization
 - Planet textures from Solar System Scope
-- Basic orbital rotation and planet movement
+- Basic orbital motion and planetary rotation
 - Mouse controls (zoom, rotate, pan)
 
-- For the practicality:
-    - All planets are 3x larger
-    - Jovian planets are 2x closer
+## ⚙️ Design Choices (Not Physically Accurate)
+
+- Planets are scaled up ~3× for visibility
+- Jovian planets are placed ~2× closer for usability
+- Orbital speeds and distances are artistically adjusted (not to scale)
+- Prioritizes visual clarity over physical accuracy
 
 ## 🪐 Textures
 
