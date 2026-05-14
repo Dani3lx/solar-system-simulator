@@ -14,7 +14,7 @@ export const transformOrbitPoint = (x, y, z, i, Ω, ω) => {
     // 3. rotate around ecliptic plane
     temp.applyAxisAngle(new THREE.Vector3(0, 1, 0), Ω);
 
-    return [temp.x, temp.y, temp.z];
+    return [temp.x, temp.y, -temp.z];
 };
 
 export const getOrbitalPathPoints = (a, b, c, numPoints, i = 0, Ω = 0, ω = 0) => {
