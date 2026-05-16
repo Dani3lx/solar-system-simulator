@@ -11,7 +11,7 @@ import { Sun } from "./constants/stars";
 
 function App() {
     const { perfVisible } = useControls({
-        perfVisible: true,
+        perfVisible: false,
     });
 
     const controls = useControls("sphere", {
