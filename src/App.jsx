@@ -9,6 +9,7 @@ import { Perf } from "r3f-perf";
 import { useControls } from "leva";
 import { Sun } from "./constants/stars";
 import { useEffect } from "react";
+import { Stars } from "@react-three/drei";
 
 function App({ onReady }) {
     const { perfVisible } = useControls({
@@ -32,7 +33,6 @@ function App({ onReady }) {
     return (
         <>
             {perfVisible && <Perf position="top-left" />}
-
             <EffectComposer>
                 <Bloom intensity={1.5} luminanceThreshold={0.5} luminanceSmoothing={1} />
                 <Vignette eskil={false} offset={0.3} darkness={0.8} />
@@ -43,6 +43,7 @@ function App({ onReady }) {
             {planets.map((planet) => (
                 <Planet key={planet.name} planet={planet} orbit={controls.orbit} timeScale={controls.timeScale} label={controls.label} />
             ))}
+            <Stars radius={300} depth={50} count={5000} factor={10} fade saturation={1} />;
         </>
     );
 }
