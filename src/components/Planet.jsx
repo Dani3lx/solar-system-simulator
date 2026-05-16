@@ -1,12 +1,13 @@
 import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Billboard, Text, Line, useTexture } from "@react-three/drei";
+import { Billboard, Text, Line, useTexture, useCursor } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
 const Planet = ({ planet, orbit, timeScale, label }) => {
     const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
     const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
     const [hovered, setHover] = useState(false);
+    useCursor(hovered);
 
     const orbitRef = useRef();
     const planetRef = useRef();
@@ -37,18 +38,22 @@ const Planet = ({ planet, orbit, timeScale, label }) => {
         <group>
             {/* orbit position */}
             <group ref={orbitRef}>
+                <mesh
+                    scale={size + 2}
+                    onPointerOver={(e) => {
+                        e.stopPropagation();
+                        setHover(true);
+                    }}
+                    onPointerOut={() => setHover(false)}
+                    visible={false}
+                >
+                    <sphereGeometry args={[1, 8, 8]} />
+                    <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+                </mesh>
                 {/* axial tilt */}
                 <group rotation-z={axialTilt}>
                     {/* spinning planet */}
-                    <mesh
-                        ref={planetRef}
-                        scale={hovered ? 3 : size}
-                        onPointerOver={(e) => {
-                            e.stopPropagation();
-                            setHover(true);
-                        }}
-                        onPointerOut={() => setHover(false)}
-                    >
+                    <mesh ref={planetRef} scale={hovered ? 3 : size}>
                         <sphereGeometry args={[1, 32, 32]} />
                         <meshStandardMaterial roughness={0.9} metalness={0.0} map={texture} />
                     </mesh>
