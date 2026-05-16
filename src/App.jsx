@@ -43,7 +43,6 @@ function App({ onReady }) {
 
     const onDeactive = () => {
         if (!povRef.current.active) return;
-        if (orbitRef.current) orbitRef.current.target.set(0, 0, 0);
         setPov({ active: false });
     };
 
