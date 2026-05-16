@@ -8,12 +8,15 @@ import { planets } from "./constants/planets";
 import { Perf } from "r3f-perf";
 import { useControls } from "leva";
 import { Sun } from "./constants/stars";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Stars } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
 
 function App({ onReady }) {
+    const [pov, setPov] = useState({ active: false, targetRef: null });
+    const orbitRef = useRef();
+    const povRef = useRef(pov);
+
     const { perfVisible } = useControls({
         perfVisible: false,
     });
@@ -28,43 +31,45 @@ function App({ onReady }) {
         },
     });
 
-    const [pov, setPov] = useState({
-        active: false,
-        position: [0, 0, 0],
-    });
-
     const onActive = (targetRef) => {
+        if (targetRef?.current && orbitRef.current) {
+            const target = targetRef.current.position;
+            // Position camera relative to planet immediately
+            orbitRef.current.target.copy(target);
+            orbitRef.current.update();
+        }
         setPov({ active: true, targetRef });
     };
 
     const onDeactive = () => {
-        setPov((prev) => ({ ...prev, active: false }));
+        if (!povRef.current.active) return;
+        if (orbitRef.current) orbitRef.current.target.set(0, 0, 0);
+        setPov({ active: false });
     };
 
-    useFrame(({ camera }) => {
-        if (pov.active && pov.targetRef?.current) {
-            const target = pov.targetRef.current.position;
+    useEffect(() => {
+        povRef.current = pov;
+    }, [pov]);
 
-            const dist = Math.sqrt(target.x ** 2 + target.z ** 2);
-            const nx = target.x / dist;
-            const nz = target.z / dist;
-
-            camera.position.lerp(
-                {
-                    x: target.x + nx * 15,
-                    y: target.y + 5,
-                    z: target.z + nz * 15,
-                },
-                0.05,
-            );
-
-            camera.lookAt(target.x * 0.3, target.y, target.z * 0.3);
-        }
-    });
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === "Escape") onDeactive();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, []);
 
     useEffect(() => {
         onReady();
     }, [onReady]);
+
+    useFrame(() => {
+        if (pov.active && pov.targetRef?.current && orbitRef.current) {
+            const target = pov.targetRef.current.position;
+            orbitRef.current.target.lerp(target, 0.1); // smoothly track planet
+            orbitRef.current.update();
+        }
+    });
 
     return (
         <>
@@ -74,12 +79,7 @@ function App({ onReady }) {
                 <Vignette eskil={false} offset={0.3} darkness={0.8} />
             </EffectComposer>
             <ambientLight intensity={0.5} />
-            <OrbitControls makeDefault enabled={!pov.active} />
-
-            <mesh scale={900} onClick={onDeactive}>
-                <sphereGeometry args={[1, 8, 8]} />
-                <meshBasicMaterial side={THREE.BackSide} transparent opacity={0} depthWrite={false} />
-            </mesh>
+            <OrbitControls makeDefault ref={orbitRef} />
 
             <Star star={Sun} timeScale={controls.timeScale} />
             {planets.map((planet) => (

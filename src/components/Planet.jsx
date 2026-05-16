@@ -39,7 +39,7 @@ const Planet = ({ planet, orbit, timeScale, label, onActive }) => {
             {/* orbit position */}
             <group ref={orbitRef}>
                 <mesh
-                    scale={size + 2}
+                    scale={2}
                     onPointerOver={(e) => {
                         e.stopPropagation();
                         setHover(true);
@@ -57,14 +57,20 @@ const Planet = ({ planet, orbit, timeScale, label, onActive }) => {
                 {/* axial tilt */}
                 <group rotation-z={axialTilt}>
                     {/* spinning planet */}
-                    <mesh ref={planetRef} scale={hovered ? 3 : size}>
+                    <mesh ref={planetRef} scale={hovered ? size * 1.5 : size}>
                         <sphereGeometry args={[1, 32, 32]} />
                         <meshStandardMaterial roughness={0.9} metalness={0.0} map={texture} />
                     </mesh>
                 </group>
 
                 <Billboard visible={label}>
-                    <Text position={[0, hovered ? 4 : size + 1, 0]} fontSize={1} color="white" anchorX="center" anchorY="middle">
+                    <Text
+                        position={[0, hovered ? size * 1.5 + 1 : size + 1, 0]}
+                        fontSize={1}
+                        color="white"
+                        anchorX="center"
+                        anchorY="middle"
+                    >
                         {name}
                     </Text>
                 </Billboard>
