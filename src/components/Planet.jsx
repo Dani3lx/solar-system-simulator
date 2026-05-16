@@ -3,7 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import { Billboard, Text, Line, useTexture, useCursor } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
 
-const Planet = ({ planet, orbit, timeScale, label }) => {
+const Planet = ({ planet, orbit, timeScale, label, onActive }) => {
     const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
     const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
     const [hovered, setHover] = useState(false);
@@ -45,6 +45,10 @@ const Planet = ({ planet, orbit, timeScale, label }) => {
                         setHover(true);
                     }}
                     onPointerOut={() => setHover(false)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onActive(orbitRef);
+                    }}
                     visible={false}
                 >
                     <sphereGeometry args={[1, 8, 8]} />

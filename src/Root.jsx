@@ -1,4 +1,4 @@
-import { useState, Suspense } from "react";
+import { useState, Suspense, useCallback } from "react";
 import { StrictMode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Leva } from "leva";
@@ -7,6 +7,10 @@ import LoadingScreen from "./components/LoadingScreen";
 
 function Root() {
     const [ready, setReady] = useState(false);
+
+    const handleReady = useCallback(() => {
+        setReady(true);
+    }, []);
 
     return (
         <StrictMode>
@@ -25,7 +29,7 @@ function Root() {
                 }}
             >
                 <Suspense fallback={null}>
-                    <App onReady={() => setReady(true)} />
+                    <App onReady={handleReady} />
                 </Suspense>
             </Canvas>
         </StrictMode>
