@@ -8,8 +8,9 @@ import { planets } from "./constants/planets";
 import { Perf } from "r3f-perf";
 import { useControls } from "leva";
 import { Sun } from "./constants/stars";
+import { useEffect } from "react";
 
-function App() {
+function App({ onReady }) {
     const { perfVisible } = useControls({
         perfVisible: false,
     });
@@ -22,6 +23,10 @@ function App() {
             max: 3,
             value: 1,
         },
+    });
+
+    useEffect(() => {
+        onReady();
     });
 
     return (

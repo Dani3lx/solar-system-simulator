@@ -1,0 +1,59 @@
+.screen__container {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
+    color: white;
+
+    transition: opacity 0.5s ease 0.75s;
+    z-index: 1000;
+}
+
+.screen__title {
+    margin-bottom: 24px;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: "Verdana, Geneva, Tahoma, sans-serif";
+}
+
+.screen__bar {
+    width: 320px;
+    height: 6px;
+    background: #222;
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.screen__progress {
+    height: 100%;
+    background: linear-gradient(90deg, #ffffff, #888888);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.screen__text {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+    letter-spacing: 0.08em;
+}
+
+@media (max-width: 480px) {
+    .screen__title {
+        font-size: 1.8rem;
+    }
+
+    .screen__bar {
+        width: 240px;
+    }
+}
