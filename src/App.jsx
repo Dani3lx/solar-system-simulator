@@ -17,16 +17,19 @@ function App({ onReady }) {
     const orbitRef = useRef();
     const clearActiveObject = useSolarStore((s) => s.clearActiveObject);
 
-    const { perfVisible } = useControls({
-        perfVisible: false,
+    const { performance } = useControls("Performance Monitor", {
+        performance: {
+            value: false,
+            label: "visible",
+        },
     });
 
-    const controls = useControls("sphere", {
+    const controls = useControls("Solar System", {
         orbit: true,
         label: true,
         timeScale: {
-            min: -3,
-            max: 3,
+            min: -10,
+            max: 10,
             value: 1,
         },
     });
@@ -53,7 +56,7 @@ function App({ onReady }) {
 
     return (
         <>
-            {perfVisible && <Perf position="top-left" />}
+            {performance && <Perf position="top-left" />}
             <EffectComposer>
                 <Bloom intensity={1.5} luminanceThreshold={0.5} luminanceSmoothing={1} />
                 <Vignette eskil={false} offset={0.3} darkness={0.8} />
