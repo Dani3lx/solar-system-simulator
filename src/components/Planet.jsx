@@ -2,12 +2,15 @@ import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Billboard, Text, Line, useTexture, useCursor } from "@react-three/drei";
 import { getOrbitalPathPoints, transformOrbitPoint } from "../utils/orbit";
+import { useSolarStore } from "../store/useSolarStore";
 
-const Planet = ({ planet, orbit, timeScale, label, onActive }) => {
+const Planet = ({ planet, orbit, timeScale, label }) => {
     const { a, e, size, speed, i, Ω, ω, name, rotationPeriod, axialTilt } = planet;
     const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
     const [hovered, setHover] = useState(false);
     useCursor(hovered);
+
+    const setActiveObject = useSolarStore((s) => s.setActiveObject);
 
     const orbitRef = useRef();
     const planetRef = useRef();
@@ -47,7 +50,7 @@ const Planet = ({ planet, orbit, timeScale, label, onActive }) => {
                     onPointerOut={() => setHover(false)}
                     onClick={(e) => {
                         e.stopPropagation();
-                        onActive(orbitRef);
+                        setActiveObject(orbitRef);
                     }}
                     visible={false}
                 >
