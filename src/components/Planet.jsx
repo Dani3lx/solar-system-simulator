@@ -79,7 +79,7 @@ const Planet = ({ planet, orbit, timeScale, label }) => {
                 </Billboard>
             </group>
 
-            <Line points={orbitPoints} dashed dashSize={0.2} gapSize={1} transparent opacity={0.1} visible={orbit} />
+            <Line points={orbitPoints} dashed dashSize={0.3} gapSize={0.7} transparent opacity={0.03} visible={orbit} />
         </group>
     );
 };

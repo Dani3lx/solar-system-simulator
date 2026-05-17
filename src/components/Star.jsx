@@ -1,12 +1,18 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import * as THREE from "three";
-import { useTexture } from "@react-three/drei";
+import { useTexture, useCursor } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { useSolarStore } from "../store/useSolarStore";
 
 const Star = ({ star, timeScale }) => {
     const { size, surfaceColor, emissiveColor, lightColor, name, rotationPeriod, T, axialTilt } = star;
     const meshRef = useRef();
+    const starRef = useRef();
     const texture = useTexture(`/textures/${name.toLowerCase()}.jpg`);
+    const setActiveObject = useSolarStore((s) => s.setActiveObject);
+
+    const [hovered, setHover] = useState(false);
+    useCursor(hovered);
 
     const rotationSpeed = (2 * Math.PI * T) / rotationPeriod;
 
@@ -15,7 +21,18 @@ const Star = ({ star, timeScale }) => {
     });
 
     return (
-        <group>
+        <group
+            ref={starRef}
+            onPointerOver={(e) => {
+                e.stopPropagation();
+                setHover(true);
+            }}
+            onPointerOut={() => setHover(false)}
+            onClick={(e) => {
+                e.stopPropagation();
+                setActiveObject(starRef);
+            }}
+        >
             <group rotation-z={axialTilt}>
                 <mesh ref={meshRef} scale={size * 0.95}>
                     <sphereGeometry args={[1, 64, 64]} />
